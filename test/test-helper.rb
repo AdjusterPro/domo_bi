@@ -7,4 +7,4 @@ require 'open-uri'
 require 'csv'
 
 # local stuff:
-require 'domo'
+require 'domo-bi'

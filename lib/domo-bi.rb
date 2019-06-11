@@ -1,9 +1,9 @@
-class DomoException < Exception
+class DomoBIException < Exception
 end
 
-class Domo
+class DomoBI
 	def initialize(client_id, secret, scope, logger, debug=false)
-        raise(DomoException, 'please provide a Client ID and Secret for Domo') if client_id.nil? or secret.nil?
+        raise(DomoBIException, 'please provide a Client ID and Secret for Domo') if client_id.nil? or secret.nil?
 		@logger = logger
 		@access_token = JSON.parse(
             self.api_get(
@@ -39,7 +39,7 @@ class Domo
 	end
 end
 
-class DomoDataSet < Domo
+class DomoDataSet < DomoBI
     def initialize(client_id, secret, logger, set_id)
 		super(client_id, secret, 'data', logger)
         @set_id = set_id
