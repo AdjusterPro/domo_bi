@@ -4,6 +4,7 @@ require 'logger'
 require 'json'
 require 'base64'
 require 'open-uri'
+require 'csv'
 
 # local stuff:
 require 'domo'

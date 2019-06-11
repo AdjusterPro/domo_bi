@@ -15,4 +15,12 @@ class DomoTest < Test::Unit::TestCase
         omit
         assert_not_nil(Domo.new(ENV['DOMO_CLIENT_ID'], ENV['DOMO_SECRET'], 'data', Logger.new(STDOUT)))
     end
+
+    def test_pull_data
+        dataset = DomoDataSet.new(ENV['DOMO_CLIENT_ID'], ENV['DOMO_SECRET'], Logger.new(STDOUT), ENV['DOMO_TEST_DATA'])
+        assert_equal(
+            ['col1', 'col2', 'col3'],
+            dataset.get_all[0].headers.first(3)
+        )
+    end
 end

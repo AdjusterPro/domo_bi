@@ -2,15 +2,16 @@ class DomoException < Exception
 end
 
 class Domo
-	def initialize(client_id, secret, scope, logger)
+	def initialize(client_id, secret, scope, logger, debug=false)
         raise(DomoException, 'please provide a Client ID and Secret for Domo') if client_id.nil? or secret.nil?
 		@logger = logger
 		@access_token = JSON.parse(
             self.api_get(
                 "/oauth/token?grant_type=client_credentials&scope=#{scope}",
-                { 'Authorization' => 'Basic ' + Base64.encode64( "#{client_id}:#{secret}" ).chomp }
+                { 'Authorization' => 'Basic ' + Base64.urlsafe_encode64( "#{client_id}:#{secret}" ).chomp }
             )
         )['access_token']
+        @debug = debug
 	end
 
 	def api_get(path, headers = nil)
@@ -18,7 +19,7 @@ class Domo
 	    headers = { 'Authorization' => "Bearer #{@access_token}" } if headers.nil?
 
 		url = "https://api.domo.com#{path}"
-		@logger.debug("fetching #{url} with headers #{headers.inspect}")
+		@logger.debug("fetching #{url}" + (@debug ? " with headers [#{headers.inspect}]" : ""))
 
 		output = ''
 		loop do
@@ -34,7 +35,7 @@ class Domo
 				next
 			end
 		end
-		output.tap { |o| @logger.debug("response: #{o.inspect}") }
+		output.tap { |o| @logger.debug("response: #{o.inspect}") if @debug }
 	end
 end
 
@@ -44,8 +45,10 @@ class DomoDataSet < Domo
         @set_id = set_id
     end
 
-    def get_all(options)
-        self.api_get("/datasets/#{@set_id}/data?includeHeader=true")
-        [{}]
+    def get_all(options = {})
+        CSV.parse(
+            self.api_get("/datasets/#{@set_id}/data?includeHeader=true"),
+            { :headers => true }
+        )
     end
 end
