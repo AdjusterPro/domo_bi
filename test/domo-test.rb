@@ -28,6 +28,13 @@ class DomoTest < Test::Unit::TestCase
         assert_compare(1, '<=', self.domo.list_datasets.size)
     end
 
+    def test_retrieve_dataset
+        assert_equal(
+            ENV['DOMO_TEST_DATA'],
+            self.dataset.retrieve['id']
+        )
+    end
+
     def test_export_data
         assert_equal(
             ['col1', 'col2', 'col3'],

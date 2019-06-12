@@ -28,13 +28,21 @@ class DomoBI
                 response = yield(url, headers)
                 break
             rescue Exception => e
-                raise e unless /429/.match(e.message)
-                @logger.warning('got 429, waiting half a minute for Domo')
-                sleep 30
-                next
+                if /429/.match(e.message)
+                    @logger.warning('got 429, waiting half a minute for Domo')
+                    sleep 30
+                    next
+                end
+
+                @logger.error("exception: #{e.inspect}, response detail: #{e.response.read_body.inspect}")
+                raise e
             end
         end
-        response.tap { |r| @logger.debug("response: #{r.inspect}") if @debug }
+
+        response.tap do |r|
+            return unless @debug
+            @logger.debug("response: #{r.inspect}")
+        end
     end
 
     def get(path, headers = {})
@@ -57,7 +65,7 @@ class DomoBI
             final_headers.each { |name, value| req['name'] = 'value' }
             req.body = payload.to_json
 
-            http.request(req)
+            http.request(req).value
         end
     end
     
@@ -70,6 +78,10 @@ class DomoDataSet < DomoBI
     def initialize(client_id, secret, logger, set_id, debug=false)
         super(client_id, secret, 'data', logger, debug)
         @set_id = set_id
+    end
+
+    def retrieve
+        JSON.parse(self.get("/datasets/#{@set_id}"))
     end
 
     def export(options = {})
