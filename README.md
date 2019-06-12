@@ -4,7 +4,7 @@
 
 ## Description
 
-A Ruby SDK for the [Domo API](https://developer.domo.com/explorer)
+A Ruby micro-SDK for the [Domo API](https://developer.domo.com/explorer)
 
 ## Features
 
@@ -34,3 +34,10 @@ dataset.export # returns all accessible data as an array of CSV::Row objects
 ## Install
 Add this line to your Gemfile:
 `gem 'domo_bi', :git => 'https://github.com/AdjusterPro/domo_bi'`
+
+Use at your own risk! This is just a quick wrapper library that I threw together to automate exporting and querying from Domo. It probably won't be published on rubygems and may not be developed much past v0.0.3.
+
+## Author
+
+* Ben Dunlap
+
