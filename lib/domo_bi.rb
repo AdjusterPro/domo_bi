@@ -58,12 +58,13 @@ class DomoBI
             http = Net::HTTP.new(uri.host, uri.port)
             http.use_ssl = true
 
-            req = Net::HTTP::Post.new(uri)
-            final_headers.each { |name, value| req['name'] = 'value' }
+            final_headers['Content-Type'] = 'application/json'
+            req = Net::HTTP::Post.new(uri, final_headers)
             req.body = payload.to_json
             @logger.debug("POST body: #{req.body.inspect}") if @debug
 
-            http.request(req).value
+            r = http.request(req) 
+            r.value || r.read_body
         end
     end
     
