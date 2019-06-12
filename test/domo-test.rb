@@ -44,6 +44,6 @@ class DomoTest < Test::Unit::TestCase
 
 
     def test_query_data
-        assert_compare(1, '<=', self.dataset.query('select * from `API Test Data`'))
+        assert_compare(1, '<=', self.dataset.query('select * from `API Test Data`')['rows'].size)
     end
 end
