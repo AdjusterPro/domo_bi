@@ -39,10 +39,7 @@ class DomoBI
             end
         end
 
-        response.tap do |r|
-            return unless @debug
-            @logger.debug("response: #{r.inspect}")
-        end
+        response.tap { |r| @logger.debug("response: #{r.inspect}") if @debug }
     end
 
     def get(path, headers = {})
@@ -64,6 +61,7 @@ class DomoBI
             req = Net::HTTP::Post.new(uri)
             final_headers.each { |name, value| req['name'] = 'value' }
             req.body = payload.to_json
+            @logger.debug("POST body: #{req.body.inspect}") if @debug
 
             http.request(req).value
         end
