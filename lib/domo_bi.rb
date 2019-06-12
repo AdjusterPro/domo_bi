@@ -1,3 +1,9 @@
+require 'logger'
+require 'json'
+require 'base64'
+require 'open-uri'
+require 'csv'
+
 class DomoBIException < Exception
 end
 
