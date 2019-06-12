@@ -8,17 +8,17 @@ A Ruby SDK for the [Domo API](https://developer.domo.com/explorer)
 
 ## Features
 
-DomoDataSet has convenience methods for the following [DataSet endpoints](https://developer.domo.com/docs/dataset-api-reference/dataset):
+`DomoDataSet` has convenience methods for the following [DataSet endpoints](https://developer.domo.com/docs/dataset-api-reference/dataset):
 
 * retrieve
 
 * query 
 
-* list
-
 * export
 
-You should also be able to use DomoBI#get and #post for any other GET or POST endpoints.
+You should also be able to use `DomoBI#get` and `#post` for any other GET or POST endpoints.
+
+`DomoBI#list_datasets` naively wraps the [List DataSets](https://developer.domo.com/docs/dataset-api-reference/dataset#List%20DataSets) endpoint but doesn't yet support its options (`sort`, `limit`, and `offset`).
 
 ## Examples
 
