@@ -1,4 +1,3 @@
-require 'logger'
 require 'json'
 require 'base64'
 require 'open-uri'
