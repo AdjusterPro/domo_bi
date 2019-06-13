@@ -19,13 +19,17 @@ class DomoBI
         )['access_token']
     end
 
+    def debug(msg)
+        @logger.debug(msg) if @debug
+    end
+
     def request(path, headers = {})
         headers['Authorization'] = "Bearer #{@access_token}" unless headers.has_key?('Authorization')
         path = "/v1#{path}" unless /^\/oauth/.match(path)
 
         url = "https://api.domo.com#{path}"
 
-        @logger.debug("requesting #{url}" + (@debug ? " with headers [#{headers.inspect}]" : ""))
+        self.debug("requesting #{url} with headers [#{headers.inspect}]")
         
         response = nil
         loop do
@@ -44,7 +48,7 @@ class DomoBI
             end
         end
 
-        response.tap { |r| @logger.debug("response: #{r.inspect}") if @debug }
+        response.tap { |r| self.debug("response: #{r.inspect}") }
     end
 
     def get(path, headers = {})
@@ -65,8 +69,7 @@ class DomoBI
 
             final_headers['Content-Type'] = 'application/json'
             req = Net::HTTP::Post.new(uri, final_headers)
-            req.body = payload.to_json
-            @logger.debug("POST body: #{req.body.inspect}") if @debug
+            (req.body = payload.to_json).tap { |b| self.debug("POST body: #{b.inspect}") }
 
             r = http.request(req) 
             r.value || r.read_body
