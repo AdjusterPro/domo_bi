@@ -84,6 +84,7 @@ end
 class DomoDataSet < DomoBI
     def initialize(client_id, secret, logger, set_id, debug=false)
         super(client_id, secret, 'data', logger, debug)
+        raise(DomoBIException, 'please provide a Domo Dataset ID') if set_id.nil?
         @set_id = set_id
     end
 

@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
     s.name = 'domo_bi'
-    s.version = '0.0.3'
+    s.version = '0.0.4'
     s.date = '2019-06-12'
     s.summary = 'Micro-SDK for Domo BI'
     s.description = 'Currently supports a subset of the DataSet API: https://developer.domo.com/docs/dataset-api-reference/dataset'

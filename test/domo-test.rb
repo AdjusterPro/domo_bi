@@ -19,6 +19,12 @@ class DomoTest < Test::Unit::TestCase
         end
     end
 
+    def test_check_for_set_id
+        assert_raise_message('please provide a Domo Dataset ID') do
+            DomoDataSet.new(ENV['DOMO_CLIENT_ID'], ENV['DOMO_SECRET'], Logger.new(STDOUT), ENV['UNDEFINED_ENV_VAR'], true)
+        end
+    end
+
     def test_domo_connection
         omit # this is implied in the tests below
         assert_not_nil(self.domo)
