@@ -52,4 +52,15 @@ class DomoTest < Test::Unit::TestCase
     def test_query_data
         assert_compare(1, '<=', self.dataset.query('select * from table')['rows'].size)
     end
+
+    def test_query_luxe
+        r = self.dataset.query_luxe('select * from table')
+        assert(r.is_a?(Array))
+        assert_compare(1, '<=', r.size)
+        assert(r[0].is_a?(Hash))
+        assert_equal(
+            ['col1', 'col2', 'col3'],
+            r[0].keys.reject { |k| k =~ /_BATCH/ }
+        )
+    end
 end

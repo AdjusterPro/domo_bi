@@ -104,4 +104,13 @@ class DomoDataSet < DomoBI
             self.post("/datasets/query/execute/#{@set_id}", { 'sql': sql })
         )
     end
+
+    def query_luxe(sql)
+        r = query(sql)
+        cols = r['columns']
+
+        r['rows'].map do |values|
+          Hash[values.map.with_index { |v, i| [cols[i], v]}]
+        end
+    end
 end
