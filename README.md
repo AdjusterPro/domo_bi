@@ -23,6 +23,8 @@ You should also be able to use `DomoBI#get` and `#post` for any other GET or POS
 ## Examples
 
 ```
+require 'domo_bi'
+
 dataset = DomoDataSet.new(client_id, client_secret, logger, dataset_id)
 
 dataset.query('select * from table') # returns a query response object[1]
