@@ -63,4 +63,15 @@ class DomoTest < Test::Unit::TestCase
             r[0].keys.reject { |k| k =~ /_BATCH/ }
         )
     end
+
+    def test_query_luxe_with_symbols
+        r = self.dataset.query_luxe('select * from table', :symbolize => true)
+        assert(r.is_a?(Array))
+        assert_compare(1, '<=', r.size)
+        assert(r[0].is_a?(Hash))
+        assert_equal(
+            [:col1, :col2, :col3],
+            r[0].keys.reject { |k| k =~ /_BATCH/ }
+        )
+    end
 end

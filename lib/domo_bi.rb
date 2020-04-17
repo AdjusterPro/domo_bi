@@ -105,12 +105,12 @@ class DomoDataSet < DomoBI
         )
     end
 
-    def query_luxe(sql)
+    def query_luxe(sql, options = {})
         r = query(sql)
         cols = r['columns']
 
         r['rows'].map do |values|
-          Hash[values.map.with_index { |v, i| [cols[i], v]}]
+          Hash[values.map.with_index { |v, i| [options[:symbolize] ? cols[i].to_sym : cols[i], v]}]
         end
     end
 end
