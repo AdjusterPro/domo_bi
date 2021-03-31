@@ -31,7 +31,7 @@ class DomoTest < Test::Unit::TestCase
     end
 
     def test_list_datasets
-        assert_compare(1, '<=', self.domo.list_datasets.size)
+        assert_compare(100, '<=', self.domo.list_datasets.size)
     end
 
     def test_retrieve_dataset

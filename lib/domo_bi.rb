@@ -54,7 +54,7 @@ class DomoBI
     def get(path, headers = {})
         self.request(path, headers) do |url, final_headers|
             output = ''
-            open(url, final_headers) do |f|
+            URI.open(url, final_headers) do |f|
                 f.each_line { |line| output += line }
             end
             output
@@ -77,14 +77,22 @@ class DomoBI
     end
     
     def list_datasets
-        JSON.parse(self.get("/datasets"))
+        offset = 0
+        all_items = []
+        loop do
+          items = JSON.parse(self.get("/datasets?offset=#{offset}&limit=50"))
+          all_items += items
+          break if items.size < 50
+          offset += 50
+        end
+        all_items
     end
 end
 
 class DomoDataSet < DomoBI
     def initialize(client_id, secret, logger, set_id, debug=false)
-        super(client_id, secret, 'data', logger, debug)
         raise(DomoBIException, 'please provide a Domo Dataset ID') if set_id.nil?
+        super(client_id, secret, 'data', logger, debug)
         @set_id = set_id
     end
 
@@ -95,7 +103,7 @@ class DomoDataSet < DomoBI
     def export(options = {})
         CSV.parse(
             self.get("/datasets/#{@set_id}/data?includeHeader=true"),
-            { :headers => true }
+            headers: true 
         )
     end
 
